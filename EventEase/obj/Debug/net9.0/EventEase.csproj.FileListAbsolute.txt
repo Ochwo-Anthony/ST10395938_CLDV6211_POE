@@ -339,3 +339,6 @@ C:\Users\lab_services_student\Desktop\Github\ST10395938_CLDV6211_POE\EventEase\b
 C:\Users\lab_services_student\Desktop\Github\ST10395938_CLDV6211_POE\EventEase\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\lab_services_student\Desktop\Github\ST10395938_CLDV6211_POE\EventEase\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\lab_services_student\Desktop\Github\ST10395938_CLDV6211_POE\EventEase\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
+C:\Users\lab_services_student\Desktop\Github\ST10395938_CLDV6211_POE\EventEase\bin\Debug\net9.0\Azure.Storage.Blobs.dll
+C:\Users\lab_services_student\Desktop\Github\ST10395938_CLDV6211_POE\EventEase\bin\Debug\net9.0\Azure.Storage.Common.dll
+C:\Users\lab_services_student\Desktop\Github\ST10395938_CLDV6211_POE\EventEase\bin\Debug\net9.0\System.IO.Hashing.dll

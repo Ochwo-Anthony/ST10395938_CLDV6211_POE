@@ -4,56 +4,163 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    .styled-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+        .styled-table th {
+            background-color: #f1f5f9;
+            color: #333;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .styled-table td {
+            background-color: #ffffff;
+            padding: 16px;
+            vertical-align: top;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .styled-table tr:hover td {
+            background-color: #e9f5ff;
+            transform: scale(1.01);
+        }
+
+    .venue-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .venue-details {
+        font-size: 0.85rem;
+        color: #555;
+        margin-top: 6px;
+        display: none;
+    }
+
+    tr:hover .venue-details {
+        display: block;
+    }
+
+    .action-buttons a {
+        margin-right: 10px;
+        text-decoration: none;
+    }
+
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+</style>
+
+<h2 class="mb-4">🎉 Events Overview</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">+ Create New Event</a>
 </p>
-<table class="table">
+
+<form asp-action="Index" method="get" class="mb-4 row g-3">
+    <div class="col-md-3">
+        <label for="eventTypeId" class="form-label">Event Type</label>
+        <select name="eventTypeId" class="form-select" asp-items="ViewBag.EventTypes">
+            <option value="">-- All Event Types --</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label for="venueId" class="form-label">Venue</label>
+        <select name="venueId" class="form-select" asp-items="ViewBag.Venues">
+            <option value="">-- All Venues --</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input type="date" name="startDate" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label for="endDate" class="form-label">End Date</label>
+        <input type="date" name="endDate" class="form-control" />
+    </div>
+
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-success">Filter</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Reset</a>
+    </div>
+</form>
+
+
+<table class="styled-table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EventName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Venues)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventType)
-            </th>
-            <th></th>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Venue</th>
+            <th>Event Type</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Venues.VenueLocation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventType.EventTypeName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <strong>@item.EventName</strong>
+                </td>
+                <td>
+                    <div><strong>@item.EventDate.ToString("dddd, dd MMM yyyy")</strong></div>
+                    <div style="font-size: 0.85rem; color: #555;">🕒 @item.EventDate.ToString("hh:mm tt")</div>
+                </td>
+                <td>
+                    @item.EventDescription
+                </td>
+                <td>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <img class="venue-image" src="@item.Venues.ImageUrl" alt="Venue Image"
+                             onerror="this.src='https://via.placeholder.com/80'" />
+                        <div>
+                            <div><strong>@item.Venues.VenueName</strong></div>
+                            <div class="venue-details">
+                                📍 @item.Venues.VenueLocation <br />
+                                👥 @item.Venues.VenueCapacity people
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>@item.EventType?.EventTypeName</td>
+                <td class="action-buttons">
+                    <a asp-action="Edit" asp-route-eventId="@item.EventId" class="btn btn-outline-warning btn-sm">Edit</a>
+                    <a asp-action="Details" asp-route-eventId="@item.EventId" class="btn btn-outline-info btn-sm">Details</a>
+                    <a asp-action="Delete" asp-route-eventId="@item.EventId" class="btn btn-outline-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
